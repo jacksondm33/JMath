@@ -5,6 +5,6 @@ public interface Function {
     double solve(Variable[] variables);
     boolean reciprocal();
     Expression derivative();
-    Expression antiDerivative();
+    Expression antiderivative();
     String stringRep();
 }

@@ -35,7 +35,7 @@ public class ExponentialTest {
     }
 
     @Test
-    public void antiDerivative() {
+    public void antiderivative() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{n}, false);
         String antiDerivative = exponential.antiDerivative().stringRep();

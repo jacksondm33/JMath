@@ -45,7 +45,7 @@ public class Exponential implements Function{
     }
 
     @Override
-    public Expression antiDerivative() {
+    public Expression antiderivative() {
         return new SimpleExpression(new Term[]{
                 new SimpleTerm(new SimpleConstant(1 / Math.log(b.value())), new Function[]{
                         new Exponential(new Constant[]{

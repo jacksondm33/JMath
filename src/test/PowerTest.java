@@ -35,7 +35,7 @@ public class PowerTest {
     }
 
     @Test
-    public void antiDerivative() {
+    public void antiderivative() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{n}, false);
         String antiDerivative = power.antiDerivative().stringRep();
