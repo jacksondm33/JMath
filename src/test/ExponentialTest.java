@@ -1,17 +1,13 @@
 package test;
 
-import base.Constant;
-import base.SimpleConstant;
-import base.SimpleVariable;
-import base.Variable;
+import base.*;
 import function.Exponential;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class ExponentialTest {
+public class ExponentialTest {
     @Test
-    void init() {
+    public void init() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{new SimpleConstant(0)}, false);
         exponential.init(new Constant[]{n});
@@ -21,16 +17,16 @@ class ExponentialTest {
     }
 
     @Test
-    void solve() {
+    public void solve() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{n}, false);
         double value = exponential.solve(new Variable[]{new SimpleVariable('x', 4)});
         double expectedValue = 81;
-        assertEquals(expectedValue, value);
+        assertEquals(expectedValue, value, 0);
     }
 
     @Test
-    void derivative() {
+    public void derivative() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{n}, false);
         String derivative = exponential.derivative().stringRep();
@@ -39,7 +35,7 @@ class ExponentialTest {
     }
 
     @Test
-    void antiDerivative() {
+    public void antiDerivative() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{n}, false);
         String antiDerivative = exponential.antiDerivative().stringRep();

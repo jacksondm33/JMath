@@ -2,13 +2,12 @@ package test;
 
 import base.*;
 import function.Power;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class PowerTest {
+public class PowerTest {
     @Test
-    void init() {
+    public void init() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{new SimpleConstant(0)}, false);
         power.init(new Constant[]{n});
@@ -18,16 +17,16 @@ class PowerTest {
     }
 
     @Test
-    void solve() {
+    public void solve() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{n}, false);
         double value = power.solve(new Variable[]{new SimpleVariable('x', 4)});
         double expectedValue = 64;
-        assertEquals(expectedValue, value);
+        assertEquals(expectedValue, value, 0);
     }
 
     @Test
-    void derivative() {
+    public void derivative() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{n}, false);
         String derivative = power.derivative().stringRep();
@@ -36,7 +35,7 @@ class PowerTest {
     }
 
     @Test
-    void antiDerivative() {
+    public void antiDerivative() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{n}, false);
         String antiDerivative = power.antiDerivative().stringRep();
