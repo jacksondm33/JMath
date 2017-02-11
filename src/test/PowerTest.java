@@ -38,9 +38,9 @@ public class PowerTest {
     public void antiderivative() {
         Constant n = new SimpleConstant(3);
         Power power = new Power(new Constant[]{n}, false);
-        String antiDerivative = power.antiDerivative().stringRep();
-        String expectedAntiDerivative = "+0.25*x^4.0";
-        assertEquals(expectedAntiDerivative, antiDerivative);
+        String antiderivative = power.antiderivative().stringRep();
+        String expectedAntiderivative = "+0.25*x^4.0";
+        assertEquals(expectedAntiderivative, antiderivative);
     }
 
 }

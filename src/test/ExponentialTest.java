@@ -38,9 +38,9 @@ public class ExponentialTest {
     public void antiderivative() {
         Constant n = new SimpleConstant(3);
         Exponential exponential = new Exponential(new Constant[]{n}, false);
-        String antiDerivative = exponential.antiDerivative().stringRep();
-        String expectedAntiDerivative = "+" + 1 / Math.log(3) + "*3.0^x";
-        assertEquals(expectedAntiDerivative, antiDerivative);
+        String antiderivative = exponential.antiderivative().stringRep();
+        String expectedAntiderivative = "+" + 1 / Math.log(3) + "*3.0^x";
+        assertEquals(expectedAntiderivative, antiderivative);
     }
 
 }
