@@ -15,7 +15,7 @@ public class Exponential implements Function{
     }
 
     @Override
-    public double solve(Variable[] variables) {
+    public double solve(Variable[] variables) throws ArithmeticException{
         if(reciprocal()){
             return 1 / Math.pow(b.value(), variables[0].value());
         }else{

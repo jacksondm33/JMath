@@ -59,7 +59,7 @@ public class Power implements Function {
      * @param x  Variable
      * @return Solution
      */
-    private double solve(Variable x){
+    private double solve(Variable x) throws ArithmeticException {
         if(reciprocal()){
             return 1 / Math.pow(a.value() * x.value() - h.value(), n.value());
         }else{
@@ -73,7 +73,7 @@ public class Power implements Function {
      * @return Solution
      */
     @Override
-    public double solve(Variable[] variables) {
+    public double solve(Variable[] variables) throws ArithmeticException{
         if(variables[0].var() == 'x'){
             return solve(variables[0]);
         }else{

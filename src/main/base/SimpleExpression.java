@@ -22,6 +22,15 @@ public class SimpleExpression implements Expression {
     }
 
     @Override
+    public double solve(Variable[] variables) throws ArithmeticException{
+        double solution = 0;
+        for(Term term : terms) {
+            solution += term.solve(variables);
+        }
+        return solution;
+    }
+
+    @Override
     public Expression derivative() {
         List<Term> derivative = new ArrayList<>();
         for(Term term : terms) {

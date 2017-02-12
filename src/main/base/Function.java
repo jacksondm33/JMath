@@ -1,7 +1,7 @@
 package base;
 
 public interface Function {
-    double solve(Variable[] variables);
+    double solve(Variable[] variables) throws ArithmeticException;
     boolean reciprocal();
     Expression derivative();
     Expression antiderivative();

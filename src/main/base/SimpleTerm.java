@@ -35,6 +35,15 @@ public class SimpleTerm implements Term {
     }
 
     @Override
+    public double solve(Variable[] variables) throws ArithmeticException{
+        double solution = constant.value();
+        for(Function function : functions){
+            solution *= function.solve(variables);
+        }
+        return solution;
+    }
+
+    @Override
     public Expression derivative() {
         return null;
     }

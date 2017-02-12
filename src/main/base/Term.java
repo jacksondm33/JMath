@@ -8,6 +8,7 @@ public interface Term {
     Constant constant();
     void setFunctions(Function[] functions);
     Function[] functions();
+    double solve(Variable[] variables) throws ArithmeticException;
     Expression derivative();
     Expression antiDerivative();
 }
