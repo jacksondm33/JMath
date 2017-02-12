@@ -1,20 +1,9 @@
-package test;
-
 import base.*;
 import function.Exponential;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ExponentialTest {
-    @Test
-    public void init() {
-        Constant n = new SimpleConstant(3);
-        Exponential exponential = new Exponential(new Constant[]{new SimpleConstant(0)}, false);
-        exponential.init(new Constant[]{n});
-        String stringRep = exponential.stringRep();
-        String expectedStringRep = "3.0^x";
-        assertEquals(expectedStringRep, stringRep);
-    }
 
     @Test
     public void solve() {

@@ -15,11 +15,6 @@ public class Exponential implements Function{
     }
 
     @Override
-    public void init(Constant[] constants) {
-        b = constants[0];
-    }
-
-    @Override
     public double solve(Variable[] variables) {
         if(reciprocal()){
             return 1 / Math.pow(b.value(), variables[0].value());
