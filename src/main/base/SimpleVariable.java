@@ -2,32 +2,51 @@ package base;
 
 public class SimpleVariable implements Variable{
 
-    char var;
-    double value;
+    private VariableMap variables;
 
     public SimpleVariable(char var, double value){
-        this.var = var;
-        this.value = value;
+        variables = new VariableMap();
+        variables.put(var, value);
+    }
+
+    public SimpleVariable(char var){
+        variables = new VariableMap();
+        variables.put(var, 0.0);
     }
 
     @Override
-    public void setVar(char var) {
-        this.var = var;
+    public VariableMap getVariables() {
+        return variables;
     }
 
     @Override
-    public char var() {
-        return var;
+    public void put(char var, double value) {
+        variables.put(var, value);
     }
 
     @Override
-    public void setValue(double value) {
-        this.value = value;
+    public double solve() throws ArithmeticException {
+        return (double) variables.values().toArray()[0];
     }
 
     @Override
-    public double value() {
-        return value;
+    public Function solve(VariableMap variables) throws ArithmeticException {
+        return this;
+    }
+
+    @Override
+    public Function derivative() {
+        return null;
+    }
+
+    @Override
+    public Function antiderivative() {
+        return null;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(variables.keySet().toArray()[0]);
     }
 
 }

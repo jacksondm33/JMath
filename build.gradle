@@ -24,3 +24,7 @@ sourceSets {
         }
     }
 }
+
+test {
+    testLogging.showStandardStreams = true
+}

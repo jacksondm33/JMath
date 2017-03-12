@@ -1,55 +1,75 @@
 package base;
 
-import base.Constant;
-import base.Function;
-import base.Term;
-
 public class SimpleTerm implements Term {
 
-    Constant constant;
-    Function[] functions;
+    private Function[] functions;
+    private VariableMap variables;
 
-    public SimpleTerm(Constant constant, Function[] functions){
-        this.constant = constant;
+    public SimpleTerm(Function[] functions){
         this.functions = functions;
+        variables = new VariableMap();
+        for(Function function : functions){
+            System.out.println(function);
+            VariableMap variables = function.getVariables();
+            for(char var : variables.keySet()){
+                this.variables.put(var, variables.get(var));
+            }
+        }
     }
 
     @Override
-    public void setConstant(Constant constant) {
-        this.constant = constant;
-    }
-
-    @Override
-    public Constant constant() {
-        return constant;
-    }
-
-    @Override
-    public void setFunctions(Function[] functions) {
-        this.functions = functions;
-    }
-
-    @Override
-    public Function[] functions() {
+    public Function[] getFunctions() {
         return functions;
     }
 
     @Override
-    public double solve(Variable[] variables) throws ArithmeticException{
-        double solution = constant.value();
+    public VariableMap getVariables() {
+        return variables;
+    }
+
+    @Override
+    public void put(char var, double value) {
+        variables.put(var, value);
         for(Function function : functions){
-            solution *= function.solve(variables);
+            function.put(var, value);
+        }
+    }
+
+    @Override
+    public double solve() throws ArithmeticException {
+        int solution = 1;
+        for(Function function : functions){
+            solution *= function.solve();
         }
         return solution;
     }
 
     @Override
-    public Expression derivative() {
+    public Term solve(VariableMap variables) throws ArithmeticException{
+        Function[] functions = new Function[this.functions.length];
+        for(int i = 0; i < this.functions.length; i++) {
+            functions[i] = this.functions[i].solve(variables);
+        }
+        return new SimpleTerm(functions);
+    }
+
+    @Override
+    public Function derivative() {
         return null;
     }
 
     @Override
-    public Expression antiDerivative() {
+    public Function antiderivative() {
         return null;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for(Function function : functions){
+            sb.append("*");
+            sb.append(function);
+        }
+        return sb.toString();
     }
 }

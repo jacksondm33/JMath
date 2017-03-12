@@ -1,73 +1,74 @@
 package base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SimpleExpression implements Expression {
 
-    Term[] terms;
+    private Term[] terms;
+    private VariableMap variables;
 
     public SimpleExpression(Term[] terms){
         this.terms = terms;
+        variables = new VariableMap();
+        for(Term term : terms){
+            VariableMap variables = term.getVariables();
+            for(char var : variables.keySet()){
+                this.variables.put(var, variables.get(var));
+            }
+        }
     }
 
     @Override
-    public void setTerms(Term[] terms) {
-        this.terms = terms;
-    }
-
-    @Override
-    public Term[] terms() {
+    public Term[] getTerms() {
         return terms;
     }
 
     @Override
-    public double solve(Variable[] variables) throws ArithmeticException{
-        double solution = 0;
-        for(Term term : terms) {
-            solution += term.solve(variables);
+    public VariableMap getVariables() {
+        return variables;
+    }
+
+    @Override
+    public void put(char var, double value) {
+        variables.put(var, value);
+        for(Term term : terms){
+            term.put(var, value);
+        }
+
+    }
+
+    @Override
+    public double solve() throws ArithmeticException {
+        int solution = 0;
+        for(Term term : terms){
+            solution += term.solve();
         }
         return solution;
     }
 
     @Override
-    public Expression derivative() {
-        List<Term> derivative = new ArrayList<>();
-        for(Term term : terms) {
-            for(Term term1 : term.derivative().terms()){
-                derivative.add(term1);
-            }
+    public Expression solve(VariableMap variables) throws ArithmeticException{
+        Term[] terms = new Term[this.terms.length];
+        for(int i = 0; i < this.terms.length; i++) {
+            terms[i] = (Term) this.terms[i].solve(variables);
         }
-        return new SimpleExpression((Term[]) derivative.toArray());
+        return new SimpleExpression(terms);
     }
 
     @Override
-    public Expression antiDerivative() {
-        List<Term> antiDerivative = new ArrayList<>();
-        for(Term term : terms) {
-            for(Term term1 : term.antiDerivative().terms()){
-                antiDerivative.add(term1);
-            }
-        }
-        return new SimpleExpression((Term[]) antiDerivative.toArray());
+    public Function derivative() {
+        return null;
     }
 
     @Override
-    public String stringRep() {
+    public Function antiderivative() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for(Term term : terms){
-            if(term.constant().value() > 0){
-                sb.append("+");
-            }
-            sb.append(term.constant().value());
-            for(Function function : term.functions()){
-                if(function.reciprocal()){
-                    sb.append("/");
-                }else{
-                    sb.append("*");
-                }
-                sb.append(function.stringRep());
-            }
+            sb.append("+");
+            sb.append(term);
         }
         return sb.toString();
     }

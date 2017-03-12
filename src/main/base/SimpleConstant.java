@@ -1,22 +1,45 @@
 package base;
 
-import base.Constant;
-
 public class SimpleConstant implements Constant {
 
-    double value;
+    private double value;
 
     public SimpleConstant(double value){
         this.value = value;
     }
 
     @Override
-    public void setValue(double value) {
-        this.value = value;
+    public VariableMap getVariables() {
+        return new VariableMap();
     }
 
     @Override
-    public double value() {
+    public void put(char var, double value) {
+
+    }
+
+    @Override
+    public double solve() throws ArithmeticException {
         return value;
+    }
+
+    @Override
+    public Constant solve(VariableMap variables) throws ArithmeticException {
+        return new SimpleConstant(value);
+    }
+
+    @Override
+    public Function derivative() {
+        return null;
+    }
+
+    @Override
+    public Function antiderivative() {
+        return null;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(value);
     }
 }

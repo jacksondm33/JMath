@@ -1,57 +1,62 @@
 package function;
 
 import base.*;
+import helper.FunctionCreator;
 
 import java.lang.Math;
 
-public class Exponential implements Function{
+public class Exponential implements BaseFunction {
 
+    private Function exponent;
     private Constant b;
-    private boolean reciprocal;
+    private VariableMap variables;
 
-    public Exponential(Constant[] constants, boolean reciprocal){
-        b = constants[0];
-        this.reciprocal = reciprocal;
+    public Exponential(Constant b){
+        this.b = b;
+        exponent = FunctionCreator.create("x");
+        variables = new VariableMap();
+        variables.put('x', 0.0);
+    }
+
+    public Exponential(Constant b, Function exponent){
+        this.b = b;
+        this.exponent = exponent;
+        variables = exponent.getVariables();
     }
 
     @Override
-    public double solve(Variable[] variables) throws ArithmeticException{
-        if(reciprocal()){
-            return 1 / Math.pow(b.value(), variables[0].value());
-        }else{
-            return Math.pow(b.value(), variables[0].value());
-        }
+    public VariableMap getVariables() {
+        return variables;
     }
 
     @Override
-    public boolean reciprocal() {
-        return reciprocal;
+    public void put(char var, double value) {
+        variables.put(var, value);
+        exponent.put(var, value);
+    }
+
+    @Override
+    public double solve() throws ArithmeticException {
+        return Math.pow(b.solve(), exponent.solve());
+    }
+
+    @Override
+    public Function solve(VariableMap variables) throws ArithmeticException {
+        return null;
     }
 
     @Override
     public Expression derivative() {
-        return new SimpleExpression(new Term[]{
-                new SimpleTerm(new SimpleConstant(Math.log(b.value())), new Function[]{
-                        new Exponential(new Constant[]{
-                                new SimpleConstant(b.value())
-                        }, false)
-                })
-        });
+        return null;
     }
 
     @Override
     public Expression antiderivative() {
-        return new SimpleExpression(new Term[]{
-                new SimpleTerm(new SimpleConstant(1 / Math.log(b.value())), new Function[]{
-                        new Exponential(new Constant[]{
-                                new SimpleConstant(b.value())
-                        }, false)
-                })
-        });
+        return null;
     }
 
     @Override
-    public String stringRep() {
-        return b.value() + "^x";
+    public String toString() {
+        return b.toString() + "^" + exponent.toString();
     }
 }
