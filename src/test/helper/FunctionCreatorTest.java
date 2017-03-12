@@ -1,6 +1,5 @@
 package helper;
 
-import base.Tools;
 import org.junit.Test;
 
 public class FunctionCreatorTest {
