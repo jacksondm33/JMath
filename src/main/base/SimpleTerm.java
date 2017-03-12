@@ -9,7 +9,6 @@ public class SimpleTerm implements Term {
         this.functions = functions;
         variables = new VariableMap();
         for(Function function : functions){
-            System.out.println(function);
             VariableMap variables = function.getVariables();
             for(char var : variables.keySet()){
                 this.variables.put(var, variables.get(var));
@@ -67,8 +66,9 @@ public class SimpleTerm implements Term {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for(Function function : functions){
-            sb.append("*");
+            sb.append("(");
             sb.append(function);
+            sb.append(")");
         }
         return sb.toString();
     }

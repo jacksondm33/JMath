@@ -4,20 +4,49 @@ import base.*;
 import function.Exponential;
 import function.Power;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FunctionCreator {
 
     public static Function create(String string){
-        String[] stringTerms = string.split("\\+");
-        Term[] terms = new Term[stringTerms.length];
-        for(int i = 0; i < stringTerms.length; i++){
-            String[] stringFunctions = stringTerms[i].split("\\*");
-            Function[] functions = new Function[stringFunctions.length];
-            for(int j = 0; j < stringFunctions.length; j++){
-                functions[j] = toFunction(stringFunctions[j]);
-            }
-            terms[i] = new SimpleTerm(functions);
+        if(!string.contains("(")){
+            return toFunction(string);
         }
-        return new SimpleExpression(terms);
+        List<Term> terms = new ArrayList<>();
+        List<Function> functions = new ArrayList<>();
+        int start = 0;
+        int tracker = 0;
+        for(int i = 0; i < string.length(); i++){
+            if(tracker > 0){
+                if(string.charAt(i) == '('){
+                    tracker += 1;
+                    continue;
+                }
+                else if(string.charAt(i) == ')'){
+                    if(tracker > 1){
+                        tracker -= 1;
+                        continue;
+                    }
+                }
+            }
+            if(string.charAt(i) == '('){
+                start = i + 1;
+                tracker += 1;
+            }
+            else if(string.charAt(i) == ')'){
+                System.out.println(string.substring(start, i));
+                functions.add(create(string.substring(start, i)));
+                tracker -= 1;
+            }
+            else if(string.charAt(i) == '+'){
+                terms.add(new SimpleTerm(functions.toArray(new Function[0])));
+                functions = new ArrayList<>();
+            }
+
+        }
+        terms.add(new SimpleTerm(functions.toArray(new Function[0])));
+        return new SimpleExpression(terms.toArray(new Term[0]));
     }
 
     private static Function toFunction(String string){

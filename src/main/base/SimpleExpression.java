@@ -67,9 +67,10 @@ public class SimpleExpression implements Expression {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for(Term term : terms){
-            sb.append("+");
             sb.append(term);
+            sb.append("+");
         }
+        sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
 
