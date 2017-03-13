@@ -10,34 +10,48 @@ import java.util.List;
 public class FunctionCreator {
 
     public static Function create(String string){
+        System.out.println(string + " - START CREATE");
+        string = trim(string);
+        System.out.println(string + " - TRIM CREATE");
         if(!string.contains("(")){
+            System.out.println(string + " - NO () TO_FUNCTION");
             return toFunction(string);
         }
         List<Term> terms = new ArrayList<>();
         List<Function> functions = new ArrayList<>();
         int start = 0;
-        int tracker = 0;
+        int depth = 0;
+        boolean function = false;
         for(int i = 0; i < string.length(); i++){
-            if(tracker > 0){
+            if(depth > 0){
                 if(string.charAt(i) == '('){
-                    tracker += 1;
+                    depth += 1;
                     continue;
                 }
                 else if(string.charAt(i) == ')'){
-                    if(tracker > 1){
-                        tracker -= 1;
+                    if(depth > 1){
+                        depth -= 1;
                         continue;
                     }
+                }
+                else if(depth == 1 && string.charAt(i) == '^'){
+                    function = true;
                 }
             }
             if(string.charAt(i) == '('){
                 start = i + 1;
-                tracker += 1;
+                depth += 1;
             }
             else if(string.charAt(i) == ')'){
-                System.out.println(string.substring(start, i));
-                functions.add(create(string.substring(start, i)));
-                tracker -= 1;
+                System.out.print(string.substring(start, i));
+                if(function){
+                    System.out.println(" - TO_FUNCTION");
+                    functions.add(toFunction(string.substring(start, i)));
+                }else {
+                    System.out.println(" - CREATE");
+                    functions.add(create(string.substring(start, i)));
+                }
+                depth -= 1;
             }
             else if(string.charAt(i) == '+'){
                 terms.add(new SimpleTerm(functions.toArray(new Function[0])));
@@ -50,6 +64,9 @@ public class FunctionCreator {
     }
 
     private static Function toFunction(String string){
+        System.out.println(string + " - START TO_FUNCTION");
+        string = trim(string);
+        System.out.println(string + " - TRIM TO_FUNCTION");
         String[] parts;
         if(containsVariable(string)){
             if(string.split("\\^").length > 1){
@@ -59,10 +76,10 @@ public class FunctionCreator {
                     return null; // x^x
                 }
                 else if(containsVariable(parts[0])){
-                    return new Power(toFunction(parts[0]), toConstant(parts[1])); // x^n
+                    return new Power(create(parts[0]), toConstant(parts[1])); // x^n
                 }
                 else if(containsVariable(parts[1])){
-                    return new Exponential(toConstant(parts[0]), toFunction(parts[1])); // b^x
+                    return new Exponential(toConstant(parts[0]), create(parts[1])); // b^x
                 }
                 else{
                     return toConstant(string);
@@ -76,6 +93,9 @@ public class FunctionCreator {
     }
 
     private static Constant toConstant(String string){
+        System.out.println(string + " - START TO_CONSTANT");
+        string = trim(string);
+        System.out.println(string + " - TRIM TO_CONSTANT");
         return new SimpleConstant(Double.parseDouble(string));
     }
 
@@ -106,6 +126,39 @@ public class FunctionCreator {
                 string.contains("X") || string.contains("x") ||
                 string.contains("Y") || string.contains("y") ||
                 string.contains("Z") || string.contains("z");
+    }
+
+    private static String trim(String string){
+        StringBuilder sb = new StringBuilder(string);
+        for(;;) {
+            if (checkTrim(sb.toString())){
+                sb.deleteCharAt(0);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            else{
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    private static boolean checkTrim(String string){
+        int depth = 0;
+        if(string.charAt(0) != '(' || string.charAt(string.length() - 1) != ')'){
+            return false;
+        }
+        for(int i = 0; i < string.length() - 1; i++){
+            if(string.charAt(i) == '('){
+                depth += 1;
+            }
+            else if(string.charAt(i) == ')'){
+                depth -= 1;
+            }
+            if(depth == 0){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
