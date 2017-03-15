@@ -1,7 +1,6 @@
 package function;
 
 import base.*;
-import function.Exponential;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

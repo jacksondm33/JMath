@@ -57,6 +57,6 @@ public class Exponential implements BaseFunction {
 
     @Override
     public String toString() {
-        return b.toString() + "^" + exponent.toString();
+        return b.toString() + "^(" + exponent.toString() + ")";
     }
 }

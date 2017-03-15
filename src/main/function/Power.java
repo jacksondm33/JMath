@@ -69,6 +69,6 @@ public class Power implements BaseFunction {
 
     @Override
     public String toString() {
-        return base.toString() + "^" + n.toString();
+        return "(" + base.toString() + ")^" + n.toString();
     }
 }
