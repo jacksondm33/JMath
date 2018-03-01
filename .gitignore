@@ -25,6 +25,10 @@ hs_err_pid*
 *.ipr
 *.iws
 
+.classpath
+.project
+.settings/
+
 .gradle/
 build/
 /bin/
