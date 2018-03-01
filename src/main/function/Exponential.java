@@ -46,16 +46,6 @@ public class Exponential implements BaseFunction {
     }
 
     @Override
-    public Expression derivative() {
-        return null;
-    }
-
-    @Override
-    public Expression antiderivative() {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return b.toString() + "^(" + exponent.toString() + ")";
     }

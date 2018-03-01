@@ -1,10 +1,11 @@
 package base;
 
 public interface Function {
+	
     VariableMap getVariables();
-    void put(char var, double value);
-    double solve() throws ArithmeticException;
-    Function solve(VariableMap variables) throws ArithmeticException;
-    Function derivative();
-    Function antiderivative();
+    Expression getVariable(char var);
+    void setVariables(VariableMap variables);
+    void setVariable(char var, Expression value);
+    Expression solve() throws ArithmeticException;
+    Expression solve(VariableMap variables) throws ArithmeticException;
 }

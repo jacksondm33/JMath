@@ -9,7 +9,7 @@
   <setting name="setup-tab">
     <setting name="setup">
       <setting name="custom-gradle-executor"/>
-      <setting name="current-directory" value="/run/media/root/Files/code/Java/IDEA/JMath"/>
+      <setting name="current-directory" value="/run/media/root/Files/code/Java/Eclipse/JMath"/>
       <setting name="log-level" value="LIFECYCLE"/>
     </setting>
   </setting>

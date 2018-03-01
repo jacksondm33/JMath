@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionCreator {
+	
+	public static final String[] operations = {"(", "+", "^"};
+	public static final String[] variables = {"A", "a", "B", "b", "C", "c", "D", "d", "E", "e", "F", "f", "G", "g", "H", "h", "I", "i", "J", "j", "K", "k", "L", "l", "M", "m", "N", "n", "O", "o", "P", "p", "Q", "q", "R", "r", "S", "s", "T", "t", "U", "u", "V", "v", "W", "w", "X", "x", "Y", "y", "Z", "z"};
 
     public static Function create(String string){
-        //System.out.println(string + " - START CREATE");
+        System.out.println("Create - " + string);
         string = trim(string);
-        //System.out.println(string + " - TRIM CREATE");
-        if(!string.contains("(")){
-            //System.out.println(string + " - NO () TO_FUNCTION");
+        System.out.println("Trimmed Create - " + string);
+        if(!containsAny(string, operations)){
+            System.out.println("No Operations - " + string + " -> To Function");
             return toFunction(string);
         }
         List<Term> terms = new ArrayList<>();
@@ -24,60 +27,73 @@ public class FunctionCreator {
         boolean function = false;
         for(int i = 0; i < string.length(); i++){
             if(depth > 0){
-                if(string.charAt(i) == '('){
-                    depth += 1;
-                    continue;
-                }else if(string.charAt(i) == ')'){
-                    if(depth > 1){
-                        depth -= 1;
+                switch (string.charAt(i)) {
+                    case '(':
+                        depth += 1;
                         continue;
+                    case ')':
+                        if (depth > 1) {
+                            depth -= 1;
+                            continue;
+                        }
+                        break;
+                    case '^':
+                        if(depth == 1) {
+                            function = true;
+                        }
+                        continue;
+                    default:
+                        continue;
+                }
+            }
+            switch (string.charAt(i)) {
+                case '(':
+                    if (i > start) {
+                        System.out.println("Function Before ( - " + string.substring(0, i));
+                        functions.add(toFunction(string.substring(0, i)));
                     }
-                }else if(depth == 1 && string.charAt(i) == '^'){
-                    function = true;
-                    continue;
-                }else{
-                    continue;
-                }
+                    start = i + 1;
+                    depth += 1;
+                    break;
+                case ')':
+                    if (function) {
+                        System.out.println("To Function - " + string.substring(start, i));
+                        functions.add(toFunction(string.substring(start, i)));
+                        function = false;
+                    } else {
+                        functions.add(create(string.substring(start, i)));
+                    }
+                    start = i + 1;
+                    depth -= 1;
+                    break;
+                case '+':
+                    if (i > start) {
+                        System.out.println("Function Before + - " + string.substring(start, i));
+                        functions.add(create(string.substring(start, i)));
+                    }
+                    System.out.println("Term Created - " + string.substring(0, i));
+                    terms.add(new SimpleTerm(functions.toArray(new Function[0])));
+                    functions = new ArrayList<>();
+                    start = i + 1;
+                    break;
             }
-            if(string.charAt(i) == '('){
-                start = i + 1;
-                depth += 1;
-            }else if(string.charAt(i) == ')'){
-                //System.out.print(string.substring(start, i));
-                if(function){
-                    //System.out.println(" - TO_FUNCTION");
-                    functions.add(toFunction(string.substring(start, i)));
-                    function = false;
-                }else{
-                    //System.out.println(" - CREATE");
-                    functions.add(create(string.substring(start, i)));
-                }
-                depth -= 1;
-            }else if(string.charAt(i) == '+'){
-                //System.out.println("TERM - " + depth + " - " + string);
-                terms.add(new SimpleTerm(functions.toArray(new Function[0])));
-                functions = new ArrayList<>();
-            }
-
         }
         terms.add(new SimpleTerm(functions.toArray(new Function[0])));
         return new SimpleExpression(terms.toArray(new Term[0]));
     }
 
     private static Function toFunction(String string){
-        //System.out.println(string + " - START TO_FUNCTION");
         string = trim(string);
-        //System.out.println(string + " - TRIM TO_FUNCTION");
         String[] parts;
-        if(containsVariable(string)){
-            if(string.split("\\^").length > 1){
+        if(containsAny(string, variables)){
+            if(string.contains("^")){
                 parts = string.split("\\^");
-                if(containsVariable(parts[0]) && containsVariable(parts[1])){
-                    System.out.println("WARNING: x^x");
+                if(containsAny(parts[0], variables) && containsAny(parts[1], variables)){
+                    System.out.println("Not Implemented - x^x");
                     return null; // x^x
-                }else if(containsVariable(parts[0])){
+                }else if(containsAny(parts[0], variables)){
                     return new Power(create(parts[0]), toConstant(parts[1])); // x^n
-                }else if(containsVariable(parts[1])){
+                }else if(containsAny(parts[1], variables)){
                     return new Exponential(toConstant(parts[0]), create(parts[1])); // b^x
                 }else{
                     return toConstant(string);
@@ -91,39 +107,17 @@ public class FunctionCreator {
     }
 
     private static Constant toConstant(String string){
-        //System.out.println(string + " - START TO_CONSTANT");
         string = trim(string);
-        //System.out.println(string + " - TRIM TO_CONSTANT");
         return new SimpleConstant(Double.parseDouble(string));
     }
 
-    private static boolean containsVariable(String string){
-        return string.contains("A") || string.contains("a")
-                || string.contains("B") || string.contains("b")
-                || string.contains("C") || string.contains("c")
-                || string.contains("D") || string.contains("d")
-                || string.contains("E") || string.contains("e")
-                || string.contains("F") || string.contains("f")
-                || string.contains("G") || string.contains("g")
-                || string.contains("H") || string.contains("h")
-                || string.contains("I") || string.contains("i")
-                || string.contains("J") || string.contains("j")
-                || string.contains("K") || string.contains("k")
-                || string.contains("L") || string.contains("l")
-                || string.contains("M") || string.contains("m")
-                || string.contains("N") || string.contains("n")
-                || string.contains("O") || string.contains("o")
-                || string.contains("P") || string.contains("p")
-                || string.contains("Q") || string.contains("q")
-                || string.contains("R") || string.contains("r")
-                || string.contains("S") || string.contains("s")
-                || string.contains("T") || string.contains("t")
-                || string.contains("U") || string.contains("u")
-                || string.contains("V") || string.contains("v")
-                || string.contains("W") || string.contains("w")
-                || string.contains("X") || string.contains("x")
-                || string.contains("Y") || string.contains("y")
-                || string.contains("Z") || string.contains("z");
+    private static boolean containsAny(String string , String[] strings){
+        for(String s : strings) {
+        	if(string.contains(s)) {
+        		return true;
+        	}
+        }
+        return false;
     }
 
     private static String trim(String string){
